@@ -36,7 +36,12 @@ class StaffSchema(ma.Schema):
 staff_schema = StaffSchema()
 staffs_schema = StaffSchema(many=True)
 
-
+# Get All Staffs
+@app.route('/staffs', methods=['GET'])
+def get_staffs():
+    all_staffs = Staffs.query.all()
+    result = staffs_schema.dump(all_staffs)
+    return jsonify(result)
 
 # Web Root Hello
 @app.route('/', methods=['GET'])
