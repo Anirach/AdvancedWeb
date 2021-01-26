@@ -6,7 +6,7 @@ from flask_marshmallow import Marshmallow
 app = Flask(__name__)
 
 # Database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://webadmin:XGMxcq57201@node7074-itstaff-cloud00.googlejp.app.ruk-com.cloud:11054/CloudDB'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://webadmin:Rach009@10.100.2.149:5432/CloudDB'
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://webadmin:XGMxcq57201@10.101.1.34:5432/CloudDB'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # Init db
@@ -63,6 +63,32 @@ def add_staff():
     db.session.commit()
 
     return staff_schema.jsonify(new_staff)
+
+# Update a Staff
+@app.route('/staff/<id>', methods=['PUT'])
+def update_staff(id):
+    staff = Staffs.query.get(id)
+    
+    name = request.json['name']
+    email = request.json['email']
+    phone = request.json['phone']
+
+    staff.name = name
+    staff.email = email
+    staff.phone = phone
+
+    db.session.commit()
+
+    return staff_schema.jsonify(staff)
+
+# Delete Staff
+@app.route('/staff/<id>', methods=['DELETE'])
+def delete_staff(id):
+    staff = Staffs.query.get(id)
+    db.session.delete(staff)
+    db.session.commit()
+    
+    return staff_schema.jsonify(staff)
 
 # Web Root Hello
 @app.route('/', methods=['GET'])
